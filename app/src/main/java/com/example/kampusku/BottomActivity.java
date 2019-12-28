@@ -2,7 +2,12 @@ package com.example.kampusku;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.kampusku.Fragment.HomeFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,7 +17,13 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Map;
+
 public class BottomActivity extends AppCompatActivity {
+
 
 
     @Override
@@ -35,6 +46,8 @@ public class BottomActivity extends AppCompatActivity {
         bundle.putString("nameku", "test");
         homeFragment.setArguments(bundle);
 
+
     }
+
 
 }
