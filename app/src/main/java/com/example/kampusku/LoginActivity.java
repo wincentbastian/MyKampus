@@ -44,14 +44,6 @@ import static java.sql.Types.NULL;
 public class LoginActivity extends AppCompatActivity {
 
 
-    final private String FCM_API = "https://fcm.googleapis.com/fcm/send";
-    final private String serverKey = "key=" + "AAAAs1TuAOU:APA91bGjZpJAiQUkR5v9nEGaov2awjFB8FU5OONt4hR_kTbUrx8zguzlMdS3bAe4VxE0jfxY4PZBJ2ceNJXgL61vagyZa_Y7CDqOhmj6nAXKqdzxWZk_3lN9XkwqWikHg13ZF-0RbrvT";
-    final private String contentType = "application/json";
-    final String TAG = "NOTIFICATION TAG";
-
-    String NOTIFICATION_TITLE;
-    String NOTIFICATION_MESSAGE;
-    String TOPIC;
 
 
 
@@ -90,28 +82,14 @@ public class LoginActivity extends AppCompatActivity {
         admin = sharedPreferences.getInt(String.valueOf(TAG_ADMIN),0);
         Log.d("asasa", "onCreate: admin  "+admin);
 
-        TOPIC = "/topics/topic"; //topic must match with what the receiver subscribed to
-        NOTIFICATION_TITLE = "Notifikasi";
-        NOTIFICATION_MESSAGE = "isi, notifikasi";
 
-        JSONObject notification = new JSONObject();
-        JSONObject notifcationBody = new JSONObject();
-        try {
-            notifcationBody.put("title", NOTIFICATION_TITLE);
-            notifcationBody.put("message", NOTIFICATION_MESSAGE);
 
-            notification.put("to", TOPIC);
-            notification.put("data", notifcationBody);
-        } catch (JSONException e) {
-            Log.e(TAG, "onCreate: " + e.getMessage() );
-        }
-        sendNotification(notification);
 
-        startService(new Intent(getApplicationContext(),MyFirebaseMessagingService.class));
-        FirebaseMessaging.getInstance().subscribeToTopic("topic");
 
 
         if (admin==1){
+            startService(new Intent(getApplicationContext(),MyFirebaseMessagingService.class));
+            FirebaseMessaging.getInstance().subscribeToTopic("topic");
             Intent intent = new Intent(LoginActivity.this, AdminActivity.class);
             intent.putExtra(TAG_TOKEN, token);
             intent.putExtra(String.valueOf(TAG_ID),id_user);
@@ -242,30 +220,5 @@ public class LoginActivity extends AppCompatActivity {
 
                 });
     }
-    private void sendNotification(JSONObject notification) {
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(FCM_API, notification,
-                new com.android.volley.Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.i(TAG, "onResponse: " + response.toString());
 
-                    }
-                },
-                new com.android.volley.Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(LoginActivity.this, "Request error", Toast.LENGTH_LONG).show();
-                        Log.i(TAG, "onErrorResponse: Didn't work");
-                    }
-                }){
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("Authorization", serverKey);
-                params.put("Content-Type", contentType);
-                return params;
-            }
-        };
-        MySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest);
-    }
 }
